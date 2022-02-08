@@ -25,8 +25,8 @@ export default function PokemonCard({ p }) {
     }, [p])
 
     return (
-        <div className="bg-teal-400 m-3 p-5 w-1/5 flex flex-col items-center rounded-3xl">
-            <h1 className="text-3xl">{p}</h1>
+        <div className="bg-teal-400 m-6 p-5 w-1/5 flex flex-col items-center rounded-3xl">
+            <h1 className="text-3xl" style={{textTransform: 'capitalize'}}>{p}</h1>
             <img src={`${pokemonImg}`} alt="pokemon-sprites"/>
             <p>Height: {pokemonData.height}</p>
             <p>Weight: {pokemonData.weight}</p>

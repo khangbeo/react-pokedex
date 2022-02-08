@@ -40,14 +40,21 @@ function App() {
   }
 
   return (
-    <div className='container mx-auto my-5'>
-      <h1 className='text-center font-bold' style={{fontSize: '3rem'}}>Pokedex</h1>
-      <Pagination 
-        gotoNextPage={nextPageUrl ? gotoNextPage : null}
-        gotoPrevPage={prevPageUrl ? gotoPrevPage : null}
-      />
-      <PokemonList pokemon={pokemon} />
+    <div className='bg-red-100'>
+      <div className='container mx-auto py-5'>
+        <h1 className='text-center font-bold' style={{fontSize: '3rem'}}>Pokedex</h1>
+        <Pagination 
+          gotoNextPage={nextPageUrl ? gotoNextPage : null}
+          gotoPrevPage={prevPageUrl ? gotoPrevPage : null}
+        />
+        <PokemonList pokemon={pokemon} />
+        <Pagination 
+          gotoNextPage={nextPageUrl ? gotoNextPage : null}
+          gotoPrevPage={prevPageUrl ? gotoPrevPage : null}
+        />
+      </div>
     </div>
+    
   );
 }
 
