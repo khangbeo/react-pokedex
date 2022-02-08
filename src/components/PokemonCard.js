@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
 
 export default function PokemonCard({ p }) {
-    const [pokemonData, setPokemonData] = useState({})
-    const [types, setTypes] = useState([])
+    const [id, setId] = useState(null)
     const [pokemonImg, setPokemonImg] = useState('')
 
     useEffect(() => {
@@ -13,8 +13,7 @@ export default function PokemonCard({ p }) {
                     signal: abortController.signal,
                 })
                 const data = await res.json()
-                setPokemonData(data)
-                setTypes(data.types)
+                setId(data.id)
                 setPokemonImg(data.sprites.front_default)
             } catch (e) {
                 console.log(e)
@@ -25,15 +24,12 @@ export default function PokemonCard({ p }) {
     }, [p])
 
     return (
-        <div className="bg-teal-400 m-6 p-5 w-1/5 flex flex-col items-center rounded-3xl">
+        
+        <Link to={`/${id}`} className="bg-teal-400 m-6 p-5 w-1/5 flex flex-col items-center rounded-3xl hover:shadow-2xl">
             <h1 className="text-3xl" style={{textTransform: 'capitalize'}}>{p}</h1>
             <img src={`${pokemonImg}`} alt="pokemon-sprites"/>
-            <p>Height: {pokemonData.height}</p>
-            <p>Weight: {pokemonData.weight}</p>
-            <div className="text-center">Types: {types.map(t => (
-                <p key={t.type.name}>{t.type.name}</p>
-            ))}</div>
-            
-        </div>
+        </Link>
+        
+        
     )
 }

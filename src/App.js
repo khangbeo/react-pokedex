@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import PokemonList from './components/PokemonList';
 import Pagination from './components/Pagination';
+import CardDetail from './components/CardDetail';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import Navbar from './components/Navbar';
 
-function App() {
-
+function Home() {
   const [pokemon, setPokemon] = useState([])
   const [currentPageUrl, setCurrentPageUrl] = useState('https://pokeapi.co/api/v2/pokemon/')
   const [nextPageUrl, setNextPageUrl] = useState('')
@@ -40,9 +42,7 @@ function App() {
   }
 
   return (
-    <div className='bg-red-100'>
       <div className='container mx-auto py-5'>
-        <h1 className='text-center font-bold' style={{fontSize: '3rem'}}>Pokedex</h1>
         <Pagination 
           gotoNextPage={nextPageUrl ? gotoNextPage : null}
           gotoPrevPage={prevPageUrl ? gotoPrevPage : null}
@@ -53,9 +53,21 @@ function App() {
           gotoPrevPage={prevPageUrl ? gotoPrevPage : null}
         />
       </div>
-    </div>
-    
   );
+}
+
+function App() {
+  return (
+    <Router>
+      <div className='bg-red-100'>
+        <Navbar />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/:id' element={<CardDetail />} />
+        </Routes>
+      </div>
+    </Router>
+  )
 }
 
 export default App;
