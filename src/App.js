@@ -10,7 +10,7 @@ function Home() {
   const [currentPageUrl, setCurrentPageUrl] = useState('https://pokeapi.co/api/v2/pokemon/')
   const [nextPageUrl, setNextPageUrl] = useState('')
   const [prevPageUrl, setPrevPageUrl] = useState('')
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   
   useEffect(() => {
     const abortController = new AbortController()
@@ -19,10 +19,10 @@ function Home() {
       try {
         const res = await fetch(currentPageUrl)
         const data = await res.json()
-        setLoading(false)
         setPokemon(data.results.map(p => p.name))
         setNextPageUrl(data.next)
         setPrevPageUrl(data.previous)
+        setLoading(false)
       } catch (e) {
         console.log(e)
       }
@@ -30,8 +30,6 @@ function Home() {
     getData()
     return () => abortController.abort()
   }, [currentPageUrl])
-
-  if (loading) return 'Loading...'
   
   function gotoNextPage() {
     setCurrentPageUrl(nextPageUrl)
@@ -47,7 +45,8 @@ function Home() {
           gotoNextPage={nextPageUrl ? gotoNextPage : null}
           gotoPrevPage={prevPageUrl ? gotoPrevPage : null}
         />
-        <PokemonList pokemon={pokemon} />
+        {loading ? <h1 className='text-center'>Loading</h1>: <PokemonList pokemon={pokemon} />}
+        
         <Pagination 
           gotoNextPage={nextPageUrl ? gotoNextPage : null}
           gotoPrevPage={prevPageUrl ? gotoPrevPage : null}
