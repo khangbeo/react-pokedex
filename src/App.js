@@ -13,6 +13,7 @@ import Pagination from "./components/Pagination";
 import RegionFilter from "./components/RegionFilter";
 import Footer from "./components/Footer";
 import CompareModal from "./components/CompareModal";
+import ScrollToTop from "./components/ScrollToTop";
 
 function Home() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -95,7 +96,6 @@ function Home() {
         if (region === "all") {
             setCurrentPageUrl("https://pokeapi.co/api/v2/pokemon/");
             setCurrentPage(1);
-            setTotalPages(1);
             setSearchParams({ page: "1" });
             navigate("/?page=1");
         } else {
@@ -111,23 +111,16 @@ function Home() {
             };
 
             const range = ranges[region];
-            const allPokemon = [];
-            for (let i = range.start; i <= range.end; i++) {
-                const res = await fetch(
-                    `https://pokeapi.co/api/v2/pokemon/${i}`
-                );
-                const data = await res.json();
-                allPokemon.push(data);
-            }
-            setPokemon(allPokemon);
-            setNextPageUrl("");
-            setPrevPageUrl("");
+            const offset = range.start - 1;
+            const limit = range.end - range.start + 1;
+
+            setCurrentPageUrl(
+                `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`
+            );
             setCurrentPage(1);
-            setTotalPages(1);
             setSearchParams({ page: "1" });
             navigate("/?page=1");
         }
-        setLoading(false);
     };
 
     const handleCompare = (pokemon) => {
@@ -173,29 +166,33 @@ function Home() {
                 selectedRegion={selectedRegion}
                 onRegionChange={handleRegionChange}
             />
-            <div className="mb-8">
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    gotoNextPage={handleNextPage}
-                    gotoPrevPage={handlePrevPage}
-                    gotoPage={handlePageChange}
-                />
-            </div>
+            {selectedRegion === "all" && (
+                <div className="mb-8">
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        gotoNextPage={handleNextPage}
+                        gotoPrevPage={handlePrevPage}
+                        gotoPage={handlePageChange}
+                    />
+                </div>
+            )}
             <PokemonList
                 pokemon={pokemon}
                 onCompare={handleCompare}
                 selectedPokemon={selectedPokemon}
             />
-            <div className="mt-8">
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    gotoNextPage={handleNextPage}
-                    gotoPrevPage={handlePrevPage}
-                    gotoPage={handlePageChange}
-                />
-            </div>
+            {selectedRegion === "all" && (
+                <div className="mt-8">
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        gotoNextPage={handleNextPage}
+                        gotoPrevPage={handlePrevPage}
+                        gotoPage={handlePageChange}
+                    />
+                </div>
+            )}
             {showCompareModal && selectedPokemon.length === 2 && (
                 <CompareModal
                     pokemon1={selectedPokemon[0]}
@@ -203,6 +200,7 @@ function Home() {
                     onClose={closeCompareModal}
                 />
             )}
+            <ScrollToTop />
         </div>
     );
 }
