@@ -13,7 +13,6 @@ import Pagination from "./components/Pagination";
 import RegionFilter from "./components/RegionFilter";
 import Footer from "./components/Footer";
 import CompareModal from "./components/CompareModal";
-import FilterSidebar from "./components/FilterSidebar";
 
 function Home() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -30,11 +29,6 @@ function Home() {
     const [totalPages, setTotalPages] = useState(1);
     const [selectedPokemon, setSelectedPokemon] = useState([]);
     const [showCompareModal, setShowCompareModal] = useState(false);
-    const [filters, setFilters] = useState({
-        types: [],
-        generation: null,
-        sortBy: "id",
-    });
 
     useEffect(() => {
         const page = parseInt(searchParams.get("page") || "1");
@@ -137,58 +131,6 @@ function Home() {
         setSelectedPokemon([]);
     };
 
-    const handleFilterChange = (newFilters) => {
-        setFilters(newFilters);
-        setSearchParams({ page: "1" }); // Reset to first page when filters change
-    };
-
-    const filteredPokemons = pokemon
-        .filter((pokemon) => {
-            // Type filter
-            if (filters.types.length > 0) {
-                // We'll need to fetch the pokemon's types to filter by type
-                // This is a simplified version - you might want to cache the type data
-                return true; // Placeholder
-            }
-
-            // Generation filter
-            if (filters.generation) {
-                const pokemonId = parseInt(
-                    pokemon.url.split("/").slice(-2, -1)[0]
-                );
-                return (
-                    pokemonId >= filters.generation.start &&
-                    pokemonId <= filters.generation.end
-                );
-            }
-
-            return true;
-        })
-        .sort((a, b) => {
-            switch (filters.sortBy) {
-                case "name":
-                    return a.name.localeCompare(b.name);
-                case "id":
-                    return (
-                        parseInt(a.url.split("/").slice(-2, -1)[0]) -
-                        parseInt(b.url.split("/").slice(-2, -1)[0])
-                    );
-                default:
-                    return 0;
-            }
-        });
-
-    const totalPagesFiltered = Math.ceil(filteredPokemons.length / 20);
-    const paginatedPokemons = filteredPokemons.slice(
-        (currentPage - 1) * 20,
-        (currentPage - 1) * 20 + 20
-    );
-
-    const handlePageChange = (newPage) => {
-        setSearchParams({ page: newPage.toString() });
-        window.scrollTo(0, 0);
-    };
-
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -199,39 +141,32 @@ function Home() {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <div className="flex gap-8">
-                <FilterSidebar onFilterChange={handleFilterChange} />
-                <div className="flex-1">
-                    <RegionFilter
-                        selectedRegion={selectedRegion}
-                        onRegionChange={handleRegionChange}
-                    />
-                    <div className="mb-8">
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPagesFiltered}
-                            gotoNextPage={nextPage}
-                            gotoPrevPage={prevPage}
-                            gotoPage={gotoPage}
-                        />
-                    </div>
-                    <PokemonList
-                        pokemon={paginatedPokemons}
-                        onCompare={handleCompare}
-                        selectedPokemon={selectedPokemon}
-                        loading={loading}
-                        onPageChange={handlePageChange}
-                    />
-                    <div className="mt-8">
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPagesFiltered}
-                            gotoNextPage={nextPage}
-                            gotoPrevPage={prevPage}
-                            gotoPage={gotoPage}
-                        />
-                    </div>
-                </div>
+            <RegionFilter
+                selectedRegion={selectedRegion}
+                onRegionChange={handleRegionChange}
+            />
+            <div className="mb-8">
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    gotoNextPage={nextPage}
+                    gotoPrevPage={prevPage}
+                    gotoPage={gotoPage}
+                />
+            </div>
+            <PokemonList
+                pokemon={pokemon}
+                onCompare={handleCompare}
+                selectedPokemon={selectedPokemon}
+            />
+            <div className="mt-8">
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    gotoNextPage={nextPage}
+                    gotoPrevPage={prevPage}
+                    gotoPage={gotoPage}
+                />
             </div>
             {showCompareModal && selectedPokemon.length === 2 && (
                 <CompareModal
