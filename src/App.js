@@ -31,15 +31,18 @@ function Home() {
     const [selectedPokemon, setSelectedPokemon] = useState([]);
     const [showCompareModal, setShowCompareModal] = useState(false);
     const [error, setError] = useState(null);
+    const [isRegionView, setIsRegionView] = useState(false);
 
     useEffect(() => {
-        const page = parseInt(searchParams.get("page") || "1");
-        setCurrentPage(page);
-        const offset = (page - 1) * 20;
-        setCurrentPageUrl(
-            `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=20`
-        );
-    }, [searchParams]);
+        if (!isRegionView) {
+            const page = parseInt(searchParams.get("page") || "1");
+            setCurrentPage(page);
+            const offset = (page - 1) * 20;
+            setCurrentPageUrl(
+                `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=20`
+            );
+        }
+    }, [searchParams, isRegionView]);
 
     useEffect(() => {
         const fetchPokemon = async () => {
@@ -94,11 +97,13 @@ function Home() {
         setLoading(true);
 
         if (region === "all") {
+            setIsRegionView(false);
             setCurrentPageUrl("https://pokeapi.co/api/v2/pokemon/");
             setCurrentPage(1);
             setSearchParams({ page: "1" });
             navigate("/?page=1");
         } else {
+            setIsRegionView(true);
             const ranges = {
                 kanto: { start: 1, end: 151 },
                 johto: { start: 152, end: 251 },
@@ -118,8 +123,8 @@ function Home() {
                 `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`
             );
             setCurrentPage(1);
-            setSearchParams({ page: "1" });
-            navigate("/?page=1");
+            setSearchParams({});
+            navigate("/");
         }
     };
 
