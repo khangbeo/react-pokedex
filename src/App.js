@@ -27,50 +27,58 @@ function Home() {
     const [selectedRegion, setSelectedRegion] = useState("all");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [selectedPokemon, setSelectedPokemon] = useState([]);
+    const [selectedPokemon, setSelectedPokemon] = useState(null);
     const [showCompareModal, setShowCompareModal] = useState(false);
+    const [comparePokemon, setComparePokemon] = useState(null);
+    const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
-        const page = parseInt(searchParams.get("page") || "1");
-        setCurrentPage(page);
+        const fetchPokemon = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch(currentPageUrl);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch Pokemon");
+                }
+                const data = await response.json();
+                setPokemon(data.results);
+                setNextPageUrl(data.next || "");
+                setPrevPageUrl(data.previous || "");
+                setTotalPages(Math.ceil(data.count / 20));
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPokemon();
+    }, [currentPageUrl]);
+
+    const handleNextPage = () => {
+        if (nextPageUrl) {
+            setCurrentPageUrl(nextPageUrl);
+            setCurrentPage((prev) => prev + 1);
+            setSearchParams({ page: currentPage + 1 });
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (prevPageUrl) {
+            setCurrentPageUrl(prevPageUrl);
+            setCurrentPage((prev) => prev - 1);
+            setSearchParams({ page: currentPage - 1 });
+        }
+    };
+
+    const handlePageChange = (page) => {
         const offset = (page - 1) * 20;
         setCurrentPageUrl(
             `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=20`
         );
-    }, [searchParams]);
-
-    useEffect(() => {
-        setLoading(true);
-        fetch(currentPageUrl)
-            .then((res) => res.json())
-            .then((data) => {
-                setLoading(false);
-                setPokemon(data.results);
-                setNextPageUrl(data.next);
-                setPrevPageUrl(data.previous);
-                setTotalPages(Math.ceil(data.count / 20));
-            })
-            .catch((error) => {
-                console.error("Error fetching Pokemon:", error);
-                setLoading(false);
-            });
-    }, [currentPageUrl]);
-
-    const nextPage = () => {
-        const newPage = currentPage + 1;
-        setSearchParams({ page: newPage.toString() });
-        navigate(`/?page=${newPage}`);
-    };
-
-    const prevPage = () => {
-        const newPage = currentPage - 1;
-        setSearchParams({ page: newPage.toString() });
-        navigate(`/?page=${newPage}`);
-    };
-
-    const gotoPage = (pageNumber) => {
-        setSearchParams({ page: pageNumber.toString() });
-        navigate(`/?page=${pageNumber}`);
+        setCurrentPage(page);
+        setSearchParams({ page });
     };
 
     const handleRegionChange = async (region) => {
@@ -149,9 +157,9 @@ function Home() {
                 <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
-                    gotoNextPage={nextPage}
-                    gotoPrevPage={prevPage}
-                    gotoPage={gotoPage}
+                    gotoNextPage={handleNextPage}
+                    gotoPrevPage={handlePrevPage}
+                    gotoPage={handlePageChange}
                 />
             </div>
             <PokemonList
@@ -163,9 +171,9 @@ function Home() {
                 <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
-                    gotoNextPage={nextPage}
-                    gotoPrevPage={prevPage}
-                    gotoPage={gotoPage}
+                    gotoNextPage={handleNextPage}
+                    gotoPrevPage={handlePrevPage}
+                    gotoPage={handlePageChange}
                 />
             </div>
             {showCompareModal && selectedPokemon.length === 2 && (
