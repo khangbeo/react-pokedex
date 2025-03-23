@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 
 export default function PokemonCard({ pokemon, onCompare, isSelected }) {
     const pokemonId = pokemon.url.split("/").slice(-2, -1)[0];
-    const isSpecialPokemon =
-        pokemon.name === "miraidon" || pokemon.name === "koraidon";
     const [imageError, setImageError] = useState(false);
 
     useEffect(() => {
@@ -19,7 +17,7 @@ export default function PokemonCard({ pokemon, onCompare, isSelected }) {
             >
                 <div className="p-4">
                     <div className="relative w-full h-48 mb-4">
-                        {isSpecialPokemon || imageError ? (
+                        {imageError ? (
                             <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-lg">
                                 <p className="text-gray-500 text-center">
                                     No image available

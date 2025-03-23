@@ -27,11 +27,18 @@ function Home() {
     const [selectedRegion, setSelectedRegion] = useState("all");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [selectedPokemon, setSelectedPokemon] = useState(null);
+    const [selectedPokemon, setSelectedPokemon] = useState([]);
     const [showCompareModal, setShowCompareModal] = useState(false);
-    const [comparePokemon, setComparePokemon] = useState(null);
     const [error, setError] = useState(null);
-    const [searchTerm, setSearchTerm] = useState("");
+
+    useEffect(() => {
+        const page = parseInt(searchParams.get("page") || "1");
+        setCurrentPage(page);
+        const offset = (page - 1) * 20;
+        setCurrentPageUrl(
+            `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=20`
+        );
+    }, [searchParams]);
 
     useEffect(() => {
         const fetchPokemon = async () => {
@@ -127,6 +134,11 @@ function Home() {
         if (selectedPokemon.length === 0) {
             setSelectedPokemon([pokemon]);
         } else if (selectedPokemon.length === 1) {
+            if (selectedPokemon[0].name === pokemon.name) {
+                console.log(selectedPokemon[0].name, pokemon.name);
+                alert("Please select a different Pokémon to compare");
+                return;
+            }
             setSelectedPokemon([...selectedPokemon, pokemon]);
             setShowCompareModal(true);
         } else {
@@ -143,6 +155,14 @@ function Home() {
         return (
             <div className="flex justify-center items-center h-screen">
                 <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-red-500"></div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <div className="text-red-500 text-xl">{error}</div>
             </div>
         );
     }
