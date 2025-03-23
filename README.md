@@ -1,70 +1,108 @@
-# Getting Started with Create React App
+# React Pokédex
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, responsive Pokédex application built with React and the PokeAPI. This application allows users to browse, search, and compare Pokémon from all generations.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+-   **Browse Pokémon**: View all Pokémon with pagination support
+-   **Search Functionality**: Search for Pokémon by name
+-   **Region Filtering**: Filter Pokémon by region (Kanto, Johto, Hoenn, etc.)
+-   **Detailed View**: Comprehensive information for each Pokémon including:
+    -   Base stats
+    -   Characteristics (species, color, egg groups, gender rate)
+    -   Evolution chain
+    -   Moves list
+    -   Type information
+    -   Physical attributes
+-   **Compare Feature**: Select two Pokémon to compare their stats side by side
+-   **Responsive Design**: Works seamlessly on both desktop and mobile devices
+-   **URL-based Navigation**: Shareable links with pagination support
+-   **Scroll to Top**: Quick navigation back to the top of the page
 
-### `npm start`
+## Technologies Used
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+-   React.js
+-   React Router for navigation
+-   TailwindCSS for styling
+-   PokeAPI for data
+-   Create React App for project setup
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Getting Started
 
-### `npm test`
+### Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+-   Node.js (v14 or higher)
+-   npm (v6 or higher)
 
-### `npm run build`
+### Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Clone the repository:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+git clone https://github.com/yourusername/react-pokedex.git
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. Navigate to the project directory:
 
-### `npm run eject`
+```bash
+cd react-pokedex
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. Install dependencies:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+4. Start the development server:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+npm start
+```
 
-## Learn More
+The application will open in your default browser at `http://localhost:3000`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Building for Production
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+To create a production build:
 
-### Code Splitting
+```bash
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+This will create an optimized production build in the `build` folder.
 
-### Analyzing the Bundle Size
+## Usage
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+1. **Browse Pokémon**:
 
-### Making a Progressive Web App
+    - Use the pagination controls to navigate through all Pokémon
+    - Click on any Pokémon card to view detailed information
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+2. **Search Pokémon**:
 
-### Advanced Configuration
+    - Use the search bar in the navigation to find specific Pokémon
+    - Results update in real-time as you type
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+3. **Filter by Region**:
 
-### Deployment
+    - Use the region filter to view Pokémon from specific generations
+    - Select "All" to return to the complete list
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+4. **Compare Pokémon**:
+    - Click the compare button on any Pokémon card
+    - Select a second Pokémon to view the comparison
+    - Close the comparison modal to start over
 
-### `npm run build` fails to minify
+## Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+-   [PokeAPI](https://pokeapi.co/) for providing the Pokémon data
+-   [Pokémon](https://www.pokemon.com/) for the original content
